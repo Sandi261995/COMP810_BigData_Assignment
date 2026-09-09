@@ -1,0 +1,193 @@
+GET skincare_reviews/_stats
+
+GET skincare_reviews/_search
+{
+  "size": 0,
+  "aggs": {
+    "rating_stats": {
+      "stats": {
+        "field": "rating"
+      }
+    }
+  }
+}
+
+GET skincare_reviews/_search
+{
+  "size": 0,
+  "aggs": {
+    "ratings": {
+      "terms": {
+        "field": "rating",
+        "size": 5,
+        "order": { "_key": "asc" }
+      }
+    }
+  }
+}
+
+GET skincare_reviews/_search
+{
+  "size": 0,
+  "aggs": {
+    "top_brands": {
+      "terms": {
+        "field": "brand_name",
+        "size": 15
+      },
+      "aggs": {
+        "average_rating": {
+          "avg": {
+            "field": "rating"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET skincare_reviews/_search
+{
+  "size": 0,
+  "aggs": {
+    "skin_types": {
+      "terms": {
+        "field": "skin_type",
+        "size": 10
+      },
+      "aggs": {
+        "average_rating": {
+          "avg": {
+            "field": "rating"
+          }
+        },
+        "recommendation_rate": {
+          "avg": {
+            "field": "is_recommended"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET skincare_reviews/_search
+{
+  "size": 0,
+  "aggs": {
+    "acne_reviews": {
+      "filter": {
+        "match": {
+          "review_text": "acne breakout blemish"
+        }
+      },
+      "aggs": {
+        "rating_stats": {
+          "stats": {
+            "field": "rating"
+          }
+        },
+        "top_categories": {
+          "terms": {
+            "field": "secondary_category",
+            "size": 10
+          }
+        }
+      }
+    },
+    "dryness_reviews": {
+      "filter": {
+        "match": {
+          "review_text": "dry dryness hydrating moisturizer"
+        }
+      },
+      "aggs": {
+        "rating_stats": {
+          "stats": {
+            "field": "rating"
+          }
+        },
+        "top_categories": {
+          "terms": {
+            "field": "secondary_category",
+            "size": 10
+          }
+        }
+      }
+    },
+    "sensitive_reviews": {
+      "filter": {
+        "match": {
+          "review_text": "sensitive irritation redness reaction"
+        }
+      },
+      "aggs": {
+        "rating_stats": {
+          "stats": {
+            "field": "rating"
+          }
+        },
+        "top_categories": {
+          "terms": {
+            "field": "secondary_category",
+            "size": 10
+          }
+        }
+      }
+    }
+  }
+}
+
+GET skincare_reviews/_search
+{
+  "size": 10,
+  "_source": [
+    "product_name",
+    "brand_name",
+    "rating",
+    "skin_type",
+    "review_title",
+    "review_text"
+  ],
+  "query": {
+    "match": {
+      "review_text": "sensitive skin irritation"
+    }
+  }
+}
+
+GET skincare_reviews/_search
+{
+  "size": 0,
+  "aggs": {
+    "rating_language": {
+      "filters": {
+        "filters": {
+          "low_rating_reviews": {
+            "range": {
+              "rating": {
+                "lte": 2
+              }
+            }
+          },
+          "high_rating_reviews": {
+            "range": {
+              "rating": {
+                "gte": 5
+              }
+            }
+          }
+        }
+      },
+      "aggs": {
+        "distinctive_review_terms": {
+          "significant_text": {
+            "field": "review_text",
+            "size": 20,
+            "filter_duplicate_text": true
+          }
+        }
+      }
+    }
+  }
+}
