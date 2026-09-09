@@ -121,9 +121,9 @@ pipeline/python/generate_recommendation_heatmap.ipynb
 3. hive -f pipeline/hive/02_statistics_and_aggregations.hql
 4. hive -f pipeline/hive/03_export_elasticsearch_docs.hql
 5. python pipeline/python/hive_es_export_to_bulk.py
-6. bash pipeline/elasticsearch/bulk_ingest_chunks.sh
-7. Run pipeline/elasticsearch/01_create_index_and_ingest.http
-8. Run pipeline/elasticsearch/02_queries_and_aggregations.http
+6. Run pipeline/elasticsearch/01_create_index_and_ingest.http
+7. Run pipeline/elasticsearch/02_queries_and_aggregations.http
+8. bash pipeline/elasticsearch/bulk_ingest_chunks.sh
 9. Run pipeline/python/generate_recommendation_heatmap.ipynb
 ```
 
